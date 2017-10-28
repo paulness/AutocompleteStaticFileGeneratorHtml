@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <style>
+        #txt-autocomplete-content {
+            width: 100%;
+            height: 200px;
+        }
+    </style>
+</head>
+
+<body>
+    <script src="js/fileSaver.min.js"></script>
+    <script src="js/jszip.min.js"></script>
+    <script src="js/prefixTrie.js"></script>
+    <script src="js/papaparse.min.js"></script>
+
+    <button id="btn-generate-autocompletefiles">Generate/Download Static Autocomplete Files</button>
+    <br/>
+    <textarea id="txt-autocomplete-content">
+SearchTerm,CountryId,Price,Information
+Australia,43,$5000,Information about Australia etc...
+Andorra,31,$9000,Information about Andorra etc...
+Africa,32,$500,Information about Africa etc...
+England,55,$10,Information about England etc...
+    </textarea>
+
+    <script src="js/index.js"></script>
+</body>
+
+</html>
