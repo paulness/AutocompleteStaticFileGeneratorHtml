@@ -2,6 +2,8 @@ document.getElementById('fileupload-csv').onchange = function (event) {
     var columnToBeUsedInSearch = document.getElementById('txt-column-tobeused-by-autocomplete').value;
     if (columnToBeUsedInSearch === '') {
         alert('Please type the column you would like to be used in the autocomplete');
+        event.target.value = '';
+        return;
     }
 
     var prefixTree = new PrefixTree();
@@ -11,6 +13,7 @@ document.getElementById('fileupload-csv').onchange = function (event) {
         step: function (row) {
             if (!row.data[0][columnToBeUsedInSearch]) {
                 alert('Please use a valid CSV, one column must be: ' + columnToBeUsedInSearch);
+                event.target.value = '';
                 throw 'csv-missing-column';
             }
 
