@@ -3,7 +3,7 @@ document.getElementById('fileupload-csv').onchange = function (event) {
     if (columnToBeUsedInSearch === '') {
         alert('Please type the column you would like to be used in the autocomplete');
     }
-    debugger;
+
     var prefixTree = new PrefixTree();
     Papa.parse(event.target.files[0], {
         header: true,
