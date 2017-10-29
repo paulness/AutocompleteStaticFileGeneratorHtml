@@ -3,12 +3,6 @@
 
 <head>
     <meta charset="utf-8">
-    <style>
-        #txt-autocomplete-content {
-            width: 100%;
-            height: 200px;
-        }
-    </style>
 </head>
 
 <body>
@@ -17,17 +11,53 @@
     <script src="js/prefixTrie.js"></script>
     <script src="js/papaparse.min.js"></script>
 
-    <button id="btn-generate-autocompletefiles">Generate/Download Static Autocomplete Files</button>
-    <br/>
-    <textarea id="txt-autocomplete-content">
-SearchTerm,CountryId,Price,Information
-Australia,43,$5000,Information about Australia etc...
-Andorra,31,$9000,Information about Andorra etc...
-Africa,32,$500,Information about Africa etc...
-England,55,$10,Information about England etc...
-    </textarea>
-
+    <p>Type the column name you want to be a part of the autocomplete search. Default: name</p>
+    <input type="text" value="name" id="txt-column-tobeused-by-autocomplete" />
+    <p>Upload the CSV file. See sample
+        <a href="autocomplete/ISO-3166-Countries-with-Regional-Codes.csv">file.</a>
+    </p>
+    <input type="file" id="fileupload-csv" accept=".csv" />
     <script src="js/index.js"></script>
+
+    <hr/>
+
+
+
+    <link rel="stylesheet" href="autocomplete/auto-complete.css" />
+
+
+    
+    <div class="ui-widget">
+        <label for="txt-autocomplete">Type: </label>
+        <input id="txt-autocomplete" class="awesomplete" />
+    </div>
+    <script src="autocomplete/auto-complete.min.js"></script>
+    <script>
+        var xhr;
+        new autoComplete({
+            selector: document.getElementById('txt-autocomplete'),
+            minChars: 1,
+            delay: 0,
+            source: function (term, response) {
+                try { xhr.abort(); } catch (e) { }
+                xhr = new XMLHttpRequest();
+                xhr.open("GET", "autocomplete/results/" + term.toUpperCase() + ".json", true);
+                xhr.onload = function () {
+                    if (xhr.status == 200) {
+                        response(JSON.parse(xhr.responseText));
+                    }
+                }
+                xhr.send();
+            },
+            renderItem: function (item, search) {
+                debugger;
+                return '<div class="autocomplete-suggestion" data-countryregion="' + item.additionalInfo.region + '">' + item.results + '</div>';
+            },
+            onSelect: function (e, term, item) {
+                alert('You have selected ' + item.innerHTML + '. Which is in the region: ' + item.getAttribute('data-countryregion'));
+            }
+        });
+    </script>
 </body>
 
 </html>

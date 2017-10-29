@@ -1,28 +1,28 @@
-document.getElementById('btn-generate-autocompletefiles').onclick = function (event) {
-    var content = document.getElementById('txt-autocomplete-content').value;
-    if (content === '') {
-        alert('Please enter some content in the text box');
-        return;
+document.getElementById('fileupload-csv').onchange = function (event) {
+    var columnToBeUsedInSearch = document.getElementById('txt-column-tobeused-by-autocomplete').value;
+    if (columnToBeUsedInSearch === '') {
+        alert('Please type the column you would like to be used in the autocomplete');
     }
     debugger;
     var prefixTree = new PrefixTree();
-    Papa.parse(content, {
+    Papa.parse(event.target.files[0], {
         header: true,
         skipEmptyLines: true,
         step: function (row) {
-            if (!row.data[0]["SearchTerm"]) {
-                alert('Please use a valid CSV, one column must be "SearchTerm"');
+            if (!row.data[0][columnToBeUsedInSearch]) {
+                alert('Please use a valid CSV, one column must be: ' + columnToBeUsedInSearch);
                 throw 'csv-missing-column';
             }
 
-            var searchTerm = row.data[0]["SearchTerm"].trim();
-            delete row.data[0]['SearchTerm'];
+            var searchTerm = row.data[0][columnToBeUsedInSearch].trim().toUpperCase();
+            delete row.data[0][columnToBeUsedInSearch];
 
             prefixTree.addWord(searchTerm, row.data[0]);
         },
         complete: function () {
             var allNodePathsForAutocomplete = prefixTree.getAllFullWords();
             saveStaticAutocompleteContent(allNodePathsForAutocomplete);
+            event.target.value = '';
         }
     });
 }
